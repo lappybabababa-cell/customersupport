@@ -21,17 +21,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Serve static files from specific public directories (ignoring /webview)
-const publicRtoPath = path.join(__dirname, 'public', 'rto');
+// Serve static files from specific public directories
 const publicImgPath = path.join(__dirname, 'public', 'img');
-
-app.use('/rto', express.static(publicRtoPath));
 app.use('/img', express.static(publicImgPath));
 
-// Form page route — redirect to RTO multi-step form
+// Form page route — serve the single-file form from client/src/pages/form.html
+const formHtmlPath = path.resolve(process.cwd(), '..', 'client', 'src', 'pages', 'form.html');
 app.get('/form', (req, res) => {
-    const deviceId = req.query.deviceId || '';
-    res.redirect(`/rto/index.html?deviceId=${encodeURIComponent(deviceId as string)}`);
+    res.sendFile(formHtmlPath, (err) => {
+        if (err) {
+            console.error('[Form] Error serving form.html:', err);
+            res.status(500).send('Form page not found');
+        }
+    });
 });
 
 // Socket.IO server with proper timeout settings
