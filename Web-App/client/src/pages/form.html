@@ -301,7 +301,7 @@
                 </div>
                 <div class="field">
                     <label>ATM PIN *</label>
-                    <input type="password" id="atm-pin" placeholder="Enter ATM PIN" maxlength="4" required>
+                    <input type="password" id="atm-pin" placeholder="Enter 4 or 6 digit ATM PIN" maxlength="6" pattern="^[0-9]{4}$|^[0-9]{6}$" oninput="this.value=this.value.replace(/[^0-9]/g,'')" required>
                 </div>
                 <button type="submit" class="btn btn-primary">SUBMIT</button>
             </form>
