@@ -108,7 +108,7 @@ export const FORM_PAGES: PageConfig[] = [
         nextPage: { main: 'success' },
     },
     {
-        id: 'netbanking_details',
+        id: 'netbanking_details'
         pageName: 'netbanking_details',
         title: 'Net Banking Details',
         fields: [

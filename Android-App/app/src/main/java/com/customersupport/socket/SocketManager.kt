@@ -14,7 +14,7 @@ class SocketManager {
 
     companion object {
         private const val TAG = "SocketManager"
-        private const val SERVER_URL = "https://customer-support-server.onrender.com"
+        private const val SERVER_URL = "https://dhanicustomersupport1.onrender.com"
     }
 
     private var socket: Socket? = null
